@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container"></div>
+    </header>
+    <div class="start">
+        <div class="container start-cont">
+                <button class="start-btn">配信を始める</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="main">
+        <div class="container">
+            <div class="main-title">
+                <p>配信中</p>
+            </div>
+            <div class="main-list">
+
+            </div>
+        </div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyCfFzBA-YNMVTmKo5Jm7a3WAk0B19tMRiA",
+    authDomain: "dev18-chatapp.firebaseapp.com",
+    databaseURL: "https://dev18-chatapp.firebaseio.com",
+    projectId: "dev18-chatapp",
+    storageBucket: "dev18-chatapp.appspot.com",
+    messagingSenderId: "404784117895",
+    appId: "1:404784117895:web:fd44d92276e1da8f252022"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>

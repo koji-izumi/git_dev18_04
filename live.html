@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live</title>
+    <link rel="stylesheet" href="css/style_live.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="room">
+            <header class="header">
+                <p class="live-id"></p>
+                <button id="js-leave-trigger">終了</button>
+            </header>
+            <div class="video">
+                <video id="js-local-stream"></video>
+                <button id="js-join-trigger">配信を始める</button>
+            </div>
+
+            <div class="remote-streams" id="js-remote-streams"></div>
+
+            <div class="message-box">
+                <div class="messages" id="js-messages"></div>
+                <form class="send">
+                <input type="text" name="name" id="js-name" placeholder="名前" required>
+                <input type="text" id="js-local-text" placeholder="コメントを入力" required>
+                <button type="submit" id="js-send-trigger" type="button">送信</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase.js"></script>
+
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+             https://firebase.google.com/docs/web/setup#available-libraries -->
+        
+        <script>
+          // Your web app's Firebase configuration
+          var firebaseConfig = {
+            apiKey: "AIzaSyCfFzBA-YNMVTmKo5Jm7a3WAk0B19tMRiA",
+            authDomain: "dev18-chatapp.firebaseapp.com",
+            databaseURL: "https://dev18-chatapp.firebaseio.com",
+            projectId: "dev18-chatapp",
+            storageBucket: "dev18-chatapp.appspot.com",
+            messagingSenderId: "404784117895",
+            appId: "1:404784117895:web:fd44d92276e1da8f252022"
+          };
+          // Initialize Firebase
+          firebase.initializeApp(firebaseConfig);
+        
+        
+        </script>
+    <script src="js/main_live.js"></script>
+
+</body>
+
+</html>
