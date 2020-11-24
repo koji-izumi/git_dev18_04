@@ -1,6 +1,7 @@
 // ビデオチャットのAPI実装
 const Peer = window.Peer;
 const param = location.search.substring(4);
+const LiveNameRef = firebase.database().ref(`liveList/${param}/liveName`)
 const newCommentRef = firebase.database().ref(`liveList/${param}/comment`);
 const remLiveRef = firebase.database().ref(`liveList/${param}`);
 const newViewerRef = firebase.database().ref(`liveList/${param}/viewer`);
@@ -95,8 +96,8 @@ $(".live-id").html(`ID:${param}`);
             localText.value = '';
             messages.scrollTop = messages.scrollHeight;
         }
-        
-        newViewerRef.on("child_added", function (data) {
+
+        newViewerRef.endAt().limitToLast(1).on("child_added", function (data) {
             let s = data.val();
             let viewerInsert = `
                     <p>${s.viewername}さんが視聴を開始しました</p>

@@ -4,12 +4,10 @@ const param = location.search.substring(4);
 const newCommentRef = firebase.database().ref(`liveList/${param}/comment`);
 const newDataRef = firebase.database().ref(`liveList/${param}`);
 const newViewerRef = firebase.database().ref(`liveList/${param}/viewer`);
-      
 
 $(".live-id").html(`ID:${param}`);
 (async function main() {
     const joinTrigger = document.getElementById('js-join-trigger');
-    const leaveTrigger = document.getElementById('js-leave-trigger');
     const remoteVideos = document.getElementById('js-remote-streams');
     const localText = document.getElementById('js-local-text');
     const sendTrigger = document.getElementById('js-send-trigger');
@@ -36,10 +34,12 @@ $(".live-id").html(`ID:${param}`);
             mode: 'sfu',
         });
 
-        newDataRef.child("viewer").push({
+        const viewerPush = newViewerRef.push({
             viewername: enterName.value,
         });
-        newViewerRef.on("child_added", function (data) {
+        const viewerKey = viewerPush.getKey();
+
+        newViewerRef.endAt().limitToLast(1).on("child_added", function (data) {
             let s = data.val();
             let viewerInsert = `
             <p>${s.viewername}さんが視聴を開始しました</p>
@@ -48,10 +48,10 @@ $(".live-id").html(`ID:${param}`);
             messages.scrollTop = messages.scrollHeight;
         })
         $("#js-name").val(enterName.value);
-        
 
-        $(".enter").css("visibility","hidden");
-        $("#js-leave-trigger").css("visibility","visible");
+
+        $(".enter").css("visibility", "hidden");
+        $("#js-leave-trigger").css("visibility", "visible");
 
 
         // Render remote stream for new peer join in the room
@@ -77,28 +77,27 @@ $(".live-id").html(`ID:${param}`);
             messages.textContent += `=== ${peerId} left ===\n`;
         });
 
-                // for closing myself
-                $("#js-leave-trigger").on('click', function() {
-                    if(confirm("退室しますか？")){
-                        remLiveRef.remove();
-                        window.close();
-                    }else{
-                        ;
-                    }
-                });
+        // for closing myself
+        $("#js-leave-trigger").on('click', function () {
+            if (confirm("退室しますか？")) {
+                newViewerRef.child(viewerKey).remove();
+                window.close();
+            } else {
+                ;
+            }
+        });
 
         sendTrigger.addEventListener('click', onClickSend);
-        leaveTrigger.addEventListener('click', () => room.close(), { once: true });
-
+        
         function onClickSend() {
             // Send message to all of the peers in the room via websocket
 
             newCommentRef.push({
                 username: name.value,
-                comment : localText.value
+                comment: localText.value
             })
             room.send(localText.value);
-            if(name.value==''||localText.value==''){
+            if (name.value == '' || localText.value == '') {
                 ;
             }
             localText.value = '';
@@ -112,6 +111,7 @@ $(".live-id").html(`ID:${param}`);
             $(".messages").append(commentInsert);
             messages.scrollTop = messages.scrollHeight;
         })
+
     });
 
     peer.on('error', console.error);

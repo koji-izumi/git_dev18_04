@@ -42,3 +42,7 @@ newDataRef.on("child_added", function (data) {
 `
     $(".main-list").append(liveJump);
 })
+
+newDataRef.on("child_removed", function(){
+    document.location.reload();
+})
