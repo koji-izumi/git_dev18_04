@@ -1,4 +1,7 @@
 @charset "UTF-8";
+button {
+    -webkit-appearance: none;
+}
 
 .container {
     max-width: 600px;
