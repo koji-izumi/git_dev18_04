@@ -1,11 +1,18 @@
 // ビデオチャットのAPI実装
 const Peer = window.Peer;
-const param = location.search.substring(4);
+const param = location.search.substring(4); //URLのパラメータを取得
+// Firebaseのリファレンスを取得
 const newCommentRef = firebase.database().ref(`liveList/${param}/comment`);
 const newDataRef = firebase.database().ref(`liveList/${param}`);
 const newViewerRef = firebase.database().ref(`liveList/${param}/viewer`);
+const dbRef = firebase.database().ref('liveList');
 
-$(".live-id").html(`ID:${param}`);
+// 配信タイトルを画面左上に表示
+newDataRef.once('value',function(snapshot){
+    const liveTitle=snapshot.val().liveName;
+    $(".live-title").html(liveTitle);
+});
+
 (async function main() {
     const joinTrigger = document.getElementById('js-join-trigger');
     const remoteVideos = document.getElementById('js-remote-streams');
@@ -16,13 +23,13 @@ $(".live-id").html(`ID:${param}`);
     const name = document.getElementById('js-name');
 
 
-    // eslint-disable-next-line require-atomic-updates
+    // APIキーを設定
     const peer = (window.peer = new Peer({
         key: '37baabbe-bb24-4d6a-9168-c72cb0f71412',
         debug: 3,
     }));
 
-    // Register join handler
+    // 視聴開始ボタン押下時の処理
     joinTrigger.addEventListener('click', () => {
         // Note that you need to ensure the peer has connected to signaling server
         // before using methods of peer instance.
@@ -34,11 +41,13 @@ $(".live-id").html(`ID:${param}`);
             mode: 'sfu',
         });
 
+        // 視聴者をFirebaseに追加（キーを取得）
         const viewerPush = newViewerRef.push({
             viewername: enterName.value,
         });
         const viewerKey = viewerPush.getKey();
 
+        // 視聴者が追加されたらメッセージを表示
         newViewerRef.endAt().limitToLast(1).on("child_added", function (data) {
             let s = data.val();
             let viewerInsert = `
@@ -47,9 +56,10 @@ $(".live-id").html(`ID:${param}`);
             $(".messages").append(viewerInsert);
             messages.scrollTop = messages.scrollHeight;
         })
+        // 視聴開始時に入力された名前をコメント入力エリアに入力
         $("#js-name").val(enterName.value);
 
-
+        // 視聴開始ボタンを非表示にし、退室ボタンを表示
         $(".enter").css("visibility", "hidden");
         $("#js-leave-trigger").css("visibility", "visible");
 
@@ -65,19 +75,19 @@ $(".live-id").html(`ID:${param}`);
             await newVideo.play().catch(console.error);
         });
 
-        // for closing room members
-        room.on('peerLeave', peerId => {
-            const remoteVideo = remoteVideos.querySelector(
-                `[data-peer-id="${peerId}"]`
-            );
-            remoteVideo.srcObject.getTracks().forEach(track => track.stop());
-            remoteVideo.srcObject = null;
-            remoteVideo.remove();
-
-            messages.textContent += `=== ${peerId} left ===\n`;
+        // 配信終了のときの処理
+        dbRef.on("child_removed", function () {
+            dbRef.orderByKey().equalTo(param).once('value', function (snapshot) {
+                if (snapshot.exists()) {
+                    ;
+                } else {
+                    alert('配信が終了しました');
+                    window.close();
+                }
+            })
         });
 
-        // for closing myself
+        // 退室ボタンを押したときにFirebaseから削除
         $("#js-leave-trigger").on('click', function () {
             if (confirm("退室しますか？")) {
                 newViewerRef.child(viewerKey).remove();
@@ -87,10 +97,15 @@ $(".live-id").html(`ID:${param}`);
             }
         });
 
+        // ウィンドウを閉じたときにFirebaseから削除
+        window.onbeforeunload = function(){
+            newViewerRef.child(viewerKey).remove();
+        }
+
         sendTrigger.addEventListener('click', onClickSend);
-        
+
         function onClickSend() {
-            // Send message to all of the peers in the room via websocket
+            /// コメント送信時の処理
 
             newCommentRef.push({
                 username: name.value,
@@ -103,6 +118,29 @@ $(".live-id").html(`ID:${param}`);
             localText.value = '';
             messages.scrollTop = messages.scrollHeight;
         }
+
+        //　視聴者が増えたときに画面右上の視聴人数を更新
+        newViewerRef.on("child_added", function(){
+            newViewerRef.once("value", function(snapshot){
+                let viewerNum = snapshot.numChildren();
+                const viewerNumInsert =`
+                <p>${viewerNum}人が視聴中</p>
+                `
+                $("#viewer-num").html(viewerNumInsert);
+            })
+        })
+        //　視聴者が減ったときに画面右上の視聴人数を更新
+        newViewerRef.on("child_removed", function(){
+            newViewerRef.once("value", function(snapshot){
+                let viewerNum = snapshot.numChildren();
+                const viewerNumInsert =`
+                <p>${viewerNum}人が視聴中</p>
+                `
+                $("#viewer-num").html(viewerNumInsert);
+            })
+        })
+
+        // コメントが送信されたときの処理
         newCommentRef.on("child_added", function (data) {
             let v = data.val();
             let commentInsert = `
@@ -116,4 +154,3 @@ $(".live-id").html(`ID:${param}`);
 
     peer.on('error', console.error);
 })();
-// ここまでビデオチャットの実装

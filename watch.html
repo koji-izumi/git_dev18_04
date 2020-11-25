@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live</title>
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style_watch.css">
 </head>
 
@@ -13,8 +14,11 @@
 
         <div class="room">
             <header class="header">
-                <p class="live-id"></p>
-                <button id="js-leave-trigger">退室</button>
+                <p class="live-title"></p>
+                <div class="header-right">
+                    <p id="viewer-num"></p>
+                    <button id="js-leave-trigger">退室</button>
+                </div>
             </header>
             <div class="video">
                 <div class="remote-streams"  id="js-remote-streams"></div>

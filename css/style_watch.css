@@ -15,10 +15,24 @@
     align-items: center;
 }
 
-.live-id {
+.live-title {
     color: #ffffff;
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: bold;
     margin-left: 10px;
+}
+
+
+.header-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#viewer-num {
+    margin-right: 30px;
+    color: #ffffff;
+    font-weight: bold;
 }
 
 #js-local-stream {
@@ -27,6 +41,7 @@
 }
 
 #js-leave-trigger {
+    cursor: pointer;
     visibility: hidden;
     margin-right: 10px;
     width: 50px;
@@ -53,6 +68,7 @@
 
 
 #js-join-trigger {
+    cursor: pointer;
     margin-top: 15px;
     width: 100px;
 }
@@ -62,10 +78,13 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: 100px;
 }
 
 #js-enter-name {
     width: 200px;
+    height: 30px;
+    font-size: 18px;
 }
 
 
@@ -78,7 +97,8 @@
     overflow-y: scroll;
     font-size: 15px;
     color: #ffffff;
-    margin:0 0 10px 10px;
+    margin: 10px;
+    line-height: 2;
 }
 
 .send {
@@ -92,4 +112,17 @@
 #js-local-text {
     width: 360px;
     margin-right: 10px;
+}
+
+.messages::-webkit-scrollbar {
+    width: 10px;
+}
+
+.messages::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #6a6767;
+}
+
+#js-send-trigger {
+    cursor: pointer;
 }

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live</title>
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style_live.css">
 </head>
 
@@ -12,8 +13,11 @@
     <div class="container">
         <div class="room">
             <header class="header">
-                <p class="live-id"></p>
+                <p class="live-title"></p>
+                <div class="header-right">
+                <p id="viewer-num"></p>
                 <button id="js-leave-trigger">終了</button>
+                </div>
             </header>
             <div class="video">
                 <video id="js-local-stream"></video>
@@ -26,7 +30,7 @@
                 <div class="messages" id="js-messages"></div>
                 <form class="send">
                 <input type="text" name="name" id="js-name" placeholder="名前" required>
-                <input type="text" id="js-local-text" placeholder="コメントを入力" required>
+                <input type="text" id="js-local-text" placeholder="コメントを入力">
                 <button type="submit" id="js-send-trigger" type="button">送信</button>
             </form>
             </div>
