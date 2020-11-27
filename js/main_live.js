@@ -90,6 +90,12 @@ LiveRef.once('value',function(snapshot){
             messages.scrollTop = messages.scrollHeight;
         }
 
+        $("#js-local-text").on("keydown", function (event) {
+            if(event.keyCode==13){
+              onClickSend();
+            }  
+        })
+
         // 新しい視聴者が加わったときの処理
         newViewerRef.endAt().limitToLast(1).on("child_added", function (data) {
             let s = data.val();

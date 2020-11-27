@@ -119,6 +119,12 @@ newDataRef.once('value',function(snapshot){
             messages.scrollTop = messages.scrollHeight;
         }
 
+        $("#js-local-text").on("keydown", function (event) {
+            if(event.keyCode==13){
+              onClickSend();
+            }  
+        })
+
         //　視聴者が増えたときに画面右上の視聴人数を更新
         newViewerRef.on("child_added", function(){
             newViewerRef.once("value", function(snapshot){
