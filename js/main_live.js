@@ -36,7 +36,7 @@ LiveRef.once('value',function(snapshot){
 
     // APIキーを設定
     const peer = (window.peer = new Peer({
-        key: //APIキーを入力,
+        key: '37baabbe-bb24-4d6a-9168-c72cb0f71412',
         debug: 3,
     }));
 
